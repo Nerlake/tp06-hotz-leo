@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { UserState } from '../ngxs/states/user.state';
 import { switchMap } from 'rxjs/operators'; // Import 'switchMap' operator
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,10 @@ import { switchMap } from 'rxjs/operators'; // Import 'switchMap' operator
 export class ProduitService {
 
     @Select(UserState.getToken) token$!: Observable<string>;
-    
+    private apiUrl = environment.apiUrl;
     constructor(private httpClient: HttpClient, private store: Store) { }
 
-    url: string = "https://tp-angular-backend-hotz-leo.onrender.com/api/catalogue"; 
+    url: string = `${this.apiUrl}/api/catalogue`; 
     produits: Produit[] = [];
 
     getAllProduct(): Observable<Produit[]> {
@@ -32,5 +33,18 @@ export class ProduitService {
           return this.httpClient.get<Produit[]>(this.url, { headers: headers });
         })
       );
-    }    
+    }   
+    
+    searchProduct(search: string): Observable<Produit[]> {
+      return this.token$.pipe(
+        switchMap(token => {
+          console.log(token);
+          const headers = new HttpHeaders({
+            'Authorization': `${token}`
+          });
+
+          return this.httpClient.get<Produit[]>(this.url + "/search/" + search, { headers: headers });
+        })
+      );
+    }
 }

@@ -18,4 +18,17 @@ exports.get = (req, res) => {
     res.send(catalogue);
 };    
 
+exports.searchProducts = (req, res) => {
+	
+	const catalogue = getProductsFromFile();
+	var search = req.params.name;
+	search = search.toLowerCase();
+	
+	const foundProducts = catalogue.filter(product => product.nom.toLowerCase().includes(req.params.name.toLowerCase()));
+	
+	res.setHeader('Content-Type', 'application/json');
+	  
+	res.send(foundProducts);
+}
+
 

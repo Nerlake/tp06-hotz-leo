@@ -11,21 +11,6 @@ const getUsersFromFile = () => {
   return JSON.parse(usersData);
 };
 
-// const addUserToFile = (user) => {
-//   const users = getUsersFromFile();
-//   users.push(user);
-//   fs.writeFile(filePath, JSON.stringify(users), (err) => {
-//     if (err) {
-//       res.status(500).send({
-//         message: err
-//       });
-//     } else {
-//       res.send(user);
-//     }
-//   });
-// }
-
-// addUserToFile promise version
 const addUserToFile = (user) => {
   return new Promise((resolve, reject) => {
     const users = getUsersFromFile();
